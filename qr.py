@@ -1,35 +1,33 @@
 import asyncio
 import os
 from datetime import datetime
-from telethon import TelegramClient
+from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 from keep_alive import keep_alive
 
 # تحميل المتغيرات من ملف .env
 load_dotenv()
 
-# بيانات الحساب
-API_ID = int(os.getenv('API_ID'))
-API_HASH = os.getenv('API_HASH')
-MONITOR_CHANNEL = "xqrrp"  # اسم القناة بدون @
+# بيانات البوت
+BOT_TOKEN = "7675038991:AAHZhCYRCKESH_o7lc9HNndC42cd9Mys2K8"
+MONITOR_CHANNEL = "@xqrrp"  # اسم القناة مع @
 
 class AutoSender:
     def __init__(self):
-        self.client = None
+        self.bot = Bot(token=BOT_TOKEN)
+        self.dp = Dispatcher()
         self.current_bio_index = 1
         self.current_hisryat_index = 1
         self.current_magtae_index = 1
 
     async def initialize(self):
-        """تهيئة العميل"""
-        self.client = TelegramClient('auto_sender_session', API_ID, API_HASH)
-        await self.client.start()
+        """تهيئة البوت"""
         print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - تم تشغيل البوت بنجاح!")
 
     async def send_message(self, text):
         """إرسال رسالة إلى القناة"""
         try:
-            await self.client.send_message(MONITOR_CHANNEL, text)
+            await self.bot.send_message(chat_id=MONITOR_CHANNEL, text=text)
             print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - تم إرسال: {text}")
         except Exception as e:
             print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - فشل في الإرسال: {e}")
@@ -55,17 +53,17 @@ class AutoSender:
     async def schedule_tasks(self):
         """جدولة المهام"""
         # بدء مهمة البايو فوراً (كل ساعة)
-        await asyncio.sleep(1)  # تأخير بسيط لضمان اكتمال الاتصال
+        await asyncio.sleep(1)
         await self.send_bio()
         asyncio.create_task(self.run_every(self.send_bio, 3600))
         
         # بدء مهمة الحصريات بعد 20 دقيقة (كل ساعة)
-        await asyncio.sleep(1200)  # 20 دقيقة = 1200 ثانية
+        await asyncio.sleep(1200)
         await self.send_hisryat()
         asyncio.create_task(self.run_every(self.send_hisryat, 3600))
         
         # بدء مهمة المقاطع بعد 40 دقيقة (كل ساعة)
-        await asyncio.sleep(1200)  # 20 دقيقة إضافية (40 دقيقة إجمالاً)
+        await asyncio.sleep(1200)
         await self.send_magtae()
         asyncio.create_task(self.run_every(self.send_magtae, 3600))
 
