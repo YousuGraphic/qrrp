@@ -3,7 +3,6 @@ import os
 from datetime import datetime
 from pyrogram import Client
 from dotenv import load_dotenv
-from keep_alive import keep_alive
 
 # تحميل المتغيرات من ملف .env
 load_dotenv()
@@ -87,9 +86,6 @@ class AutoSender:
             await asyncio.sleep(3600)
 
 async def main():
-    # تشغيل خادم keep_alive
-    keep_alive()
-    
     sender = AutoSender()
     while True:
         try:
