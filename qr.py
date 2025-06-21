@@ -1,7 +1,7 @@
 import asyncio
 import os
 from datetime import datetime
-from aiogram import Bot
+from pyrogram import Client
 from dotenv import load_dotenv
 from keep_alive import keep_alive
 
@@ -10,23 +10,28 @@ load_dotenv()
 
 # بيانات البوت
 BOT_TOKEN = "7675038991:AAHZhCYRCKESH_o7lc9HNndC42cd9Mys2K8"
-MONITOR_CHANNEL = "@xqrrp"  # تأكد من إضافة @ قبل اسم القناة
+MONITOR_CHANNEL = "xqrrp"  # بدون @
 
 class AutoSender:
     def __init__(self):
-        self.bot = Bot(token=BOT_TOKEN)
+        self.app = Client(
+            "my_bot",
+            bot_token=BOT_TOKEN,
+            in_memory=True
+        )
         self.current_bio_index = 1
         self.current_hisryat_index = 1
         self.current_magtae_index = 1
 
     async def initialize(self):
         """تهيئة البوت"""
+        await self.app.start()
         print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - تم تشغيل البوت بنجاح!")
 
     async def send_message(self, text):
         """إرسال رسالة إلى القناة"""
         try:
-            await self.bot.send_message(chat_id=MONITOR_CHANNEL, text=text)
+            await self.app.send_message(chat_id=MONITOR_CHANNEL, text=text)
             print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - تم إرسال: {text}")
         except Exception as e:
             print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - فشل في الإرسال: {e}")
