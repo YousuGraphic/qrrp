@@ -1,7 +1,7 @@
 import asyncio
 import os
 from datetime import datetime
-from aiogram import Bot, Dispatcher
+from aiogram import Bot
 from dotenv import load_dotenv
 from keep_alive import keep_alive
 
@@ -10,12 +10,11 @@ load_dotenv()
 
 # بيانات البوت
 BOT_TOKEN = "7675038991:AAHZhCYRCKESH_o7lc9HNndC42cd9Mys2K8"
-MONITOR_CHANNEL = "@xqrrp"  # اسم القناة مع @
+MONITOR_CHANNEL = "@xqrrp"  # تأكد من إضافة @ قبل اسم القناة
 
 class AutoSender:
     def __init__(self):
         self.bot = Bot(token=BOT_TOKEN)
-        self.dp = Dispatcher()
         self.current_bio_index = 1
         self.current_hisryat_index = 1
         self.current_magtae_index = 1
